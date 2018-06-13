@@ -36,14 +36,16 @@ public class UserController extends BaseController {
 	 * @param client_id
 	 * @param redirect_uri
 	 * @param response_type
+	 * @param scope
+	 * @param state
 	 * @return
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String loginUI(Map<String, Object> map,
-			@RequestParam(required = true) String client_id,
-			@RequestParam(required = true) String redirect_uri,
-			@RequestParam(required = true) String response_type,
-			@RequestParam String scope, @RequestParam String state) {
+			@RequestParam String client_id, @RequestParam String redirect_uri,
+			@RequestParam String response_type,
+			@RequestParam(required = false) String scope,
+			@RequestParam(required = false) String state) {
 
 		if (null == StringUtil.isEmpty(client_id)) {
 			map.put("code", "invalid_client_id");
