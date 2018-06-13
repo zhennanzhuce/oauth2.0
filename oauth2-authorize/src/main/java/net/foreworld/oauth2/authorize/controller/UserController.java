@@ -5,7 +5,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import net.foreworld.controller.BaseController;
+import net.foreworld.oauth2.authorize.service.UserAppService;
 import net.foreworld.oauth2.authorize.service.UserService;
+import net.foreworld.oauth2.model.UserApp;
 import net.foreworld.util.StringUtil;
 
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,9 @@ public class UserController extends BaseController {
 	@Resource
 	private UserService userService;
 
+	@Resource
+	private UserAppService userAppService;
+
 	/**
 	 *
 	 * @param map
@@ -37,7 +42,8 @@ public class UserController extends BaseController {
 	public String loginUI(Map<String, Object> map,
 			@RequestParam(required = true) String client_id,
 			@RequestParam(required = true) String redirect_uri,
-			@RequestParam(required = true) String response_type) {
+			@RequestParam(required = true) String response_type,
+			@RequestParam String scope, @RequestParam String state) {
 
 		if (null == StringUtil.isEmpty(client_id)) {
 			map.put("code", "invalid_client_id");
@@ -58,6 +64,20 @@ public class UserController extends BaseController {
 			return "user/login_error";
 		}
 
+		UserApp ua = userAppService.getUserAuth(client_id);
+
+		if (null == ua) {
+			map.put("code", "invalid_client_id");
+			return "user/login_error";
+		}
+
+		map.put("req_client_id", client_id);
+		map.put("req_redirect_uri", redirect_uri);
+		map.put("req_response_type", response_type);
+		map.put("req_scope", scope);
+		map.put("req_state", state);
+
+		map.put("user_app", ua);
 		return "user/login";
 	}
 

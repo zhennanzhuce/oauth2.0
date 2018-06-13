@@ -28,10 +28,16 @@ public class UserAppServiceTest {
 	UserAppService userAppService;
 
 	@Test
-	public void test_selectByExample() {
-		UserApp u = userAppService
-				.getUserAuth("513ae2a0f0d611e68376e3b0bc3e1d71");
-		System.err.println(u.getApp_name());
+	public void test_getUserAuth() {
+		// 513ae2a0f0d611e68376e3b0bc3e1d71
+		UserApp ua = userAppService.getUserAuth("1");
+
+		if (null == ua) {
+			System.err.println("obj is null");
+			return;
+		}
+
+		System.err.println(ua.getApp_name());
 	}
 
 	@Test
