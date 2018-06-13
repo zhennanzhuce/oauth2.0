@@ -148,7 +148,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.foreworld</groupId>
-			<artifactId>foreworld-genc-model</artifactId>
+			<artifactId>oauth2-model</artifactId>
 			<version>1.0.1</version>
 		</dependency>
 	</dependencies>

@@ -1,4 +1,4 @@
-package net.foreworld.oauth2.authorize.test;
+package net.foreworld.oauth2.model.test;
 
 /**
  *

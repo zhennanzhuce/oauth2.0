@@ -16,7 +16,7 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="userRealm" class="net.foreworld.genc.core.shiro.UserRealm" />
+	<bean id="userRealm" class="net.foreworld.oauth2.authorize.core.shiro.UserRealm" />
 
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="userRealm" />
@@ -32,7 +32,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/static/** = anon
-				/user/login = anon
+				/ = anon
 				/user/logout = logout
 				/**=authc
 			</value>

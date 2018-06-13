@@ -1,13 +1,13 @@
-package net.foreworld.genc.test;
+package net.foreworld.oauth2.authorize.test;
 
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import net.foreworld.genc.RunGencAppClient;
-import net.foreworld.genc.model.User;
-import net.foreworld.genc.service.UserService;
 import net.foreworld.model.ResultMap;
+import net.foreworld.oauth2.authorize.RunOauth2AppClient;
+import net.foreworld.oauth2.authorize.service.UserService;
+import net.foreworld.oauth2.model.User;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Import(RunGencAppClient.class)
+@Import(RunOauth2AppClient.class)
 public class UserServiceTest {
 
 	@Resource
