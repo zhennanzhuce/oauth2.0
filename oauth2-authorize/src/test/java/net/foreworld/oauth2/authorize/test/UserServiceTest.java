@@ -30,18 +30,13 @@ public class UserServiceTest {
 
 	@Test
 	public void test_selectByExample() {
-		List<User> list = userService.selectByExample(null);
-		System.err.println(list.size());
-	}
+		List<User> l = userService.selectByExample(null);
+		System.err.println(l.size());
 
-	@Test
-	public void test_register() {
-		User user = new User();
-		user.setUser_name("testuser");
-
-		ResultMap<User> map = userService.register(user);
-		System.err.println(map.getSuccess());
-		System.err.println(map.getData().getCreate_time());
+		for (int i = 0; i < l.size(); i++) {
+			System.err
+					.println(l.get(i).getId() + ":" + l.get(i).getUser_name());
+		}
 	}
 
 	@Test
@@ -59,7 +54,22 @@ public class UserServiceTest {
 
 	@Test
 	public void test_resetPwd() {
-		userService.resetPwd("1");
+		userService.resetPwd("9c012a33aa8b4ecc8aaf20ea149a6f25");
+	}
+
+	@Test
+	public void test_login() {
+		ResultMap<User> map = userService.login("mega", "123456");
+
+		if (!map.getSuccess()) {
+			System.err.println(map.getCode() + ":" + map.getMsg());
+			return;
+		}
+
+		User u = map.getData();
+
+		System.err.println(u.getId() + ":" + u.getUser_name() + ":"
+				+ u.getSalt());
 	}
 
 }

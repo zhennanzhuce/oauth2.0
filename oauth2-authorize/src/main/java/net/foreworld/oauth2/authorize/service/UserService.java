@@ -15,8 +15,6 @@ public interface UserService extends IService<User> {
 
 	User getByName(String user_name);
 
-	ResultMap<User> register(User entity);
-
 	/**
 	 *
 	 * @param entity

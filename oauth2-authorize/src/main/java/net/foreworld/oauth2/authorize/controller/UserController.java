@@ -5,8 +5,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import net.foreworld.controller.BaseController;
+import net.foreworld.model.ResultMap;
 import net.foreworld.oauth2.authorize.service.UserAppService;
 import net.foreworld.oauth2.authorize.service.UserService;
+import net.foreworld.oauth2.model.User;
 import net.foreworld.oauth2.model.UserApp;
 import net.foreworld.util.StringUtil;
 
@@ -89,14 +91,19 @@ public class UserController extends BaseController {
 	 * @param client_id
 	 * @param redirect_uri
 	 * @param response_type
+	 * @param scope
+	 * @param state
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = { "/" }, method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Object> authorize(Map<String, Object> map,
-			@RequestParam(required = true) String client_id,
-			@RequestParam(required = true) String redirect_uri,
-			@RequestParam(required = true) String response_type) {
+			@RequestParam String client_id, @RequestParam String redirect_uri,
+			@RequestParam String response_type,
+			@RequestParam(required = false) String scope,
+			@RequestParam(required = false) String state,
+			@RequestParam(required = true) String user_name,
+			@RequestParam(required = true) String user_pass) {
 
 		if (null == StringUtil.isEmpty(client_id)) {
 			map.put("code", "invalid_client_id");
@@ -108,8 +115,19 @@ public class UserController extends BaseController {
 			return map;
 		}
 
-		if (!"code".equals(response_type)) {
+		switch (response_type) {
+		case "code":
+			break;
+		default:
 			map.put("code", "unsupported_response_type");
+			return map;
+		}
+
+		ResultMap<User> m = userService.login(user_name, user_pass);
+
+		if (!m.getSuccess()) {
+			map.put("code", m.getCode());
+			map.put("msg", m.getMsg());
 			return map;
 		}
 

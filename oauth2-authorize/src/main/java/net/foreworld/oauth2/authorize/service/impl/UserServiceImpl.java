@@ -31,6 +31,7 @@ public class UserServiceImpl extends BaseService<UserMapper, User> implements
 	public int save(User entity) {
 		entity.setId(null);
 		entity.setCreate_time(new Date());
+		entity.setStatus(Status.START.value());
 		return super.save(entity);
 	}
 
@@ -46,18 +47,31 @@ public class UserServiceImpl extends BaseService<UserMapper, User> implements
 	@Override
 	public ResultMap<User> login(String user_name, String user_pass) {
 		ResultMap<User> map = new ResultMap<User>();
-		map.setMsg("port: " + server_port + ",  login: " + user_name + "|"
-				+ user_pass);
+		map.setSuccess(false);
 
-		List<User> list = selectByExample(null);
-		System.err.println(list.size());
+		User u = getByName(user_name);
 
-		for (int i = 0; i < list.size(); i++) {
-			System.err.println(list.get(i).getUser_name());
+		if (null == u) {
+			map.setMsg("用户名或密码输入错误");
+			map.setCode("10001");
+			return map;
 		}
 
-		map.setMsg("" + list.size());
+		if (1 != u.getStatus()) {
+			map.setMsg("禁止登陆");
+			map.setCode("10002");
+			return map;
+		}
 
+		if (!u.getUser_pass()
+				.equals(new SimpleHash("MD5", user_pass, new Md5Hash(u
+						.getSalt()), 1024).toString())) {
+			map.setMsg("用户名或密码输入错误");
+			map.setCode("10003");
+			return map;
+		}
+
+		map.setData(u);
 		map.setSuccess(true);
 		return map;
 	}
@@ -67,16 +81,6 @@ public class UserServiceImpl extends BaseService<UserMapper, User> implements
 		User entity = new User();
 		entity.setUser_name(user_name);
 		return getByUser(entity);
-	}
-
-	@Override
-	public ResultMap<User> register(User entity) {
-		save(entity);
-
-		ResultMap<User> map = new ResultMap<User>();
-		map.setData(entity);
-		map.setSuccess(true);
-		return map;
 	}
 
 	@Override

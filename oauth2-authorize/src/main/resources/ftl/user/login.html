@@ -7,6 +7,44 @@
 	</head>
 
 	<body>
+		<form id='logFrm' method='post'>
+			<table border='1'>
+				<tr style='display:none'>
+					<td>response_type</td>
+					<td><input value='${req_response_type!}'></td>
+				</tr>
+				<tr style='display:none'>
+					<td>client_id</td>
+					<td><input value='${req_client_id!}'></td>
+				</tr>
+				<tr style='display:none'>
+					<td>redirect_uri</td>
+					<td><input value='${req_redirect_uri!}'></td>
+				</tr>
+				<tr style='display:none'>
+					<td>scope</td>
+					<td><input value='${req_scope!}'></td>
+				</tr>
+				<tr style='display:none'>
+					<td>state</td>
+					<td><input value='${req_state!}'></td>
+				</tr>
+				<tr>
+					<td>帐号</td>
+					<td><input required name='user_name' id='logFrm_user_name'></td>
+				</tr>
+				<tr>
+					<td>密码</td>
+					<td><input required type='password' name='user_pass' id='logFrm_user_pass'></td>
+				</tr>
+				<tr>
+					<td colspan='2'>
+						<button type='submit'>授权并登陆</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+
 		<#include "/_pagelet/js.html"/>
 	</body>
 
