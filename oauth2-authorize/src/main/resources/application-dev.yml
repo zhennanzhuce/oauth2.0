@@ -1,0 +1,38 @@
+
+server:
+  port: 8883
+
+debug: false
+
+logging:
+  level:
+    root: info
+  tk:
+    mybatis:
+      springboot:
+        mapper: trace
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/genc?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123
+    druid:
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      stat-view-servlet:
+        allow: true
+  redis:
+   database: 1
+   host: 127.0.0.1
+   port: 6379
+   password:
+   timeout: 0
+   pool:
+     max-active: 8
+     max-wait: -1
+     max-idle: 8
+     min-idle: 0
