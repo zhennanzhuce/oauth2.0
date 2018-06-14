@@ -1,5 +1,6 @@
 package net.foreworld.oauth2.authorize.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -87,23 +88,25 @@ public class UserController extends BaseController {
 
 	/**
 	 *
-	 * @param map
 	 * @param client_id
 	 * @param redirect_uri
 	 * @param response_type
 	 * @param scope
 	 * @param state
+	 * @param user_name
+	 * @param user_pass
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = { "/" }, method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Object> authorize(Map<String, Object> map,
-			@RequestParam String client_id, @RequestParam String redirect_uri,
+	public Map<String, Object> authorize(@RequestParam String client_id,
+			@RequestParam String redirect_uri,
 			@RequestParam String response_type,
 			@RequestParam(required = false) String scope,
 			@RequestParam(required = false) String state,
-			@RequestParam(required = true) String user_name,
-			@RequestParam(required = true) String user_pass) {
+			@RequestParam String user_name, @RequestParam String user_pass) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
 
 		if (null == StringUtil.isEmpty(client_id)) {
 			map.put("code", "invalid_client_id");

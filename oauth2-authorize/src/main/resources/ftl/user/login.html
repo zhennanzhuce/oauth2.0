@@ -2,44 +2,44 @@
 <!DOCTYPE html>
 <html lang="zh">
 	<head>
-		<title>应用授权 | ${(corp_name)!}</title>
+		<title>应用授权 | ${corp_name!}</title>
 		<#include "/_pagelet/header.html"/>
 	</head>
 
 	<body>
-		<form id='logFrm' method='post'>
+		<form id='logFrm' onsubmit='return false;' role='form'>
 			<table border='1'>
 				<tr style='display:none'>
 					<td>response_type</td>
-					<td><input value='${req_response_type!}'></td>
+					<td><input name='response_type' value='${req_response_type!}'></td>
 				</tr>
 				<tr style='display:none'>
 					<td>client_id</td>
-					<td><input value='${req_client_id!}'></td>
+					<td><input name='client_id' value='${req_client_id!}'></td>
 				</tr>
 				<tr style='display:none'>
 					<td>redirect_uri</td>
-					<td><input value='${req_redirect_uri!}'></td>
+					<td><input name='redirect_uri' value='${req_redirect_uri!}'></td>
 				</tr>
 				<tr style='display:none'>
 					<td>scope</td>
-					<td><input value='${req_scope!}'></td>
+					<td><input name='scope' value='${req_scope!}'></td>
 				</tr>
 				<tr style='display:none'>
 					<td>state</td>
-					<td><input value='${req_state!}'></td>
+					<td><input name='state' value='${req_state!}'></td>
 				</tr>
 				<tr>
 					<td>帐号</td>
-					<td><input required name='user_name' id='logFrm_user_name'></td>
+					<td><input required name='user_name' id='logFrm_user_name' placeholder='帐号'></td>
 				</tr>
 				<tr>
 					<td>密码</td>
-					<td><input required type='password' name='user_pass' id='logFrm_user_pass'></td>
+					<td><input required type='password' name='user_pass' id='logFrm_user_pass' placeholder='密码'></td>
 				</tr>
 				<tr>
 					<td colspan='2'>
-						<button type='submit'>授权并登陆</button>
+						<button type='submit' id='btn_login' onclick="return false;">授权并登陆</button>
 					</td>
 				</tr>
 			</table>
@@ -49,5 +49,21 @@
 	</body>
 
 	<script type="text/javascript">
+	$(function(){
+		$('#btn_login').click(function(){
+			$.ajax({
+				url: '/',
+				type: 'POST',
+				dataType: 'JSON',
+				data: $('#logFrm').serializeObjectForm(),
+				success: function(data){
+					console.log(data)
+				},
+				error: function(){
+					alert(arguments[2]);
+				}
+			});
+		});
+	});
 	</script>
 </html>
