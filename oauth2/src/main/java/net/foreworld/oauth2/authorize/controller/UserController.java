@@ -35,8 +35,8 @@ public class UserController extends BaseController {
 	private static final String PATH_USER_LOGIN_ERROR = "authorize/user/login_error";
 	private static final String PATH_USER_AUTHORIZE_ERROR = "authorize/user/authorize_error";
 
-	private static final String code = "code";
-	private static final String msg = "msg";
+	private static final String CODE = "code";
+	private static final String MSG = "msg";
 
 	private static final String invalid_client_id = "invalid_client_id";
 	private static final String invalid_redirect_uri = "invalid_redirect_uri";
@@ -61,12 +61,12 @@ public class UserController extends BaseController {
 			@RequestParam(required = false) String state) {
 
 		if (null == StringUtil.isEmpty(client_id)) {
-			map.put(code, invalid_client_id);
+			map.put(CODE, invalid_client_id);
 			return PATH_USER_LOGIN_ERROR;
 		}
 
 		if (null == StringUtil.isEmpty(redirect_uri)) {
-			map.put(code, invalid_redirect_uri);
+			map.put(CODE, invalid_redirect_uri);
 			return PATH_USER_LOGIN_ERROR;
 		}
 
@@ -75,14 +75,14 @@ public class UserController extends BaseController {
 		case "code":
 			break;
 		default:
-			map.put(code, unsupported_response_type);
+			map.put(CODE, unsupported_response_type);
 			return PATH_USER_LOGIN_ERROR;
 		}
 
 		UserApp ua = userAppService.getUserAuth(client_id);
 
 		if (null == ua) {
-			map.put(code, invalid_client_id);
+			map.put(CODE, invalid_client_id);
 			return PATH_USER_LOGIN_ERROR;
 		}
 
@@ -117,12 +117,12 @@ public class UserController extends BaseController {
 			@RequestParam String user_name, @RequestParam String user_pass) {
 
 		if (null == StringUtil.isEmpty(client_id)) {
-			map.put(code, invalid_client_id);
+			map.put(CODE, invalid_client_id);
 			return PATH_USER_AUTHORIZE_ERROR;
 		}
 
 		if (null == StringUtil.isEmpty(redirect_uri)) {
-			map.put(code, invalid_redirect_uri);
+			map.put(CODE, invalid_redirect_uri);
 			return PATH_USER_AUTHORIZE_ERROR;
 		}
 
@@ -130,30 +130,30 @@ public class UserController extends BaseController {
 		case "code":
 			break;
 		default:
-			map.put(code, unsupported_response_type);
+			map.put(CODE, unsupported_response_type);
 			return PATH_USER_AUTHORIZE_ERROR;
 		}
 
 		UserApp ua = userAppService.getUserAuth(client_id);
 
 		if (null == ua) {
-			map.put(code, invalid_client_id);
+			map.put(CODE, invalid_client_id);
 			return PATH_USER_AUTHORIZE_ERROR;
 		}
 
 		ResultMap<User> m = userService.login(user_name, user_pass);
 
 		if (!m.getSuccess()) {
-			map.put(code, m.getCode());
-			map.put(msg, m.getMsg());
+			map.put(CODE, m.getCode());
+			map.put(MSG, m.getMsg());
 			return PATH_USER_AUTHORIZE_ERROR;
 		}
 
-		String code = userAppService.authorize(client_id, redirect_uri,
-				"user_id");
+		String code = userAppService.authorize(client_id, redirect_uri, m
+				.getData().getId());
 
 		if (null == code) {
-			map.put(code, invalid_authorize);
+			map.put(CODE, invalid_authorize);
 			return PATH_USER_AUTHORIZE_ERROR;
 		}
 

@@ -36,6 +36,11 @@ public class UserAppServiceImpl extends BaseService<UserAppMapper, UserApp>
 	@Override
 	public String authorize(String client_id, String redirect_uri,
 			String user_id) {
+
+		System.err.println(client_id);
+		System.err.println(redirect_uri);
+		System.err.println(user_id);
+
 		return "83d844d8ae06fbc1299ba3f5ed088834";
 	}
 
