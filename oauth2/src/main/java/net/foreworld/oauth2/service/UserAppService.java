@@ -16,4 +16,6 @@ public interface UserAppService extends IService<UserApp> {
 
 	List<UserApp> getAll();
 
+	String authorize(String client_id, String redirect_uri, String user_id);
+
 }

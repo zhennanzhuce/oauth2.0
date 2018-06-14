@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-		<form id='logFrm' onsubmit='return false;' role='form'>
+		<form id='logFrm' method='POST' action='/'>
 			<table border='1'>
 				<tr style='display:none'>
 					<td>response_type</td>
@@ -39,7 +39,7 @@
 				</tr>
 				<tr>
 					<td colspan='2'>
-						<button type='submit' id='btn_login' onclick="return false;">授权并登陆</button>
+						<button type='submit'>授权并登陆</button>
 					</td>
 				</tr>
 			</table>
@@ -49,21 +49,5 @@
 	</body>
 
 	<script type="text/javascript">
-	$(function(){
-		$('#btn_login').click(function(){
-			$.ajax({
-				url: '/',
-				type: 'POST',
-				dataType: 'JSON',
-				data: $('#logFrm').serializeObjectForm(),
-				success: function(data){
-					console.log(data)
-				},
-				error: function(){
-					alert(arguments[2]);
-				}
-			});
-		});
-	});
 	</script>
 </html>

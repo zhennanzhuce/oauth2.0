@@ -1,6 +1,5 @@
 package net.foreworld.oauth2.authorize.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -32,6 +30,8 @@ public class UserController extends BaseController {
 
 	@Resource
 	private UserAppService userAppService;
+
+	private static final String ROOT = "authorize/";
 
 	/**
 	 *
@@ -52,12 +52,12 @@ public class UserController extends BaseController {
 
 		if (null == StringUtil.isEmpty(client_id)) {
 			map.put("code", "invalid_client_id");
-			return "user/login_error";
+			return ROOT + "user/login_error";
 		}
 
 		if (null == StringUtil.isEmpty(redirect_uri)) {
 			map.put("code", "invalid_redirect_uri");
-			return "user/login_error";
+			return ROOT + "user/login_error";
 		}
 
 		switch (response_type) {
@@ -66,14 +66,14 @@ public class UserController extends BaseController {
 			break;
 		default:
 			map.put("code", "unsupported_response_type");
-			return "user/login_error";
+			return ROOT + "user/login_error";
 		}
 
 		UserApp ua = userAppService.getUserAuth(client_id);
 
 		if (null == ua) {
 			map.put("code", "invalid_client_id");
-			return "authorize/user/login_error";
+			return ROOT + "user/login_error";
 		}
 
 		map.put("req_client_id", client_id);
@@ -83,11 +83,12 @@ public class UserController extends BaseController {
 		map.put("req_state", state);
 
 		map.put("user_app", ua);
-		return "authorize/user/login";
+		return ROOT + "user/login";
 	}
 
 	/**
 	 *
+	 * @param map
 	 * @param client_id
 	 * @param redirect_uri
 	 * @param response_type
@@ -97,25 +98,22 @@ public class UserController extends BaseController {
 	 * @param user_pass
 	 * @return
 	 */
-	@ResponseBody
-	@RequestMapping(value = { "/" }, method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Object> authorize(@RequestParam String client_id,
-			@RequestParam String redirect_uri,
+	@RequestMapping(value = { "/" }, method = RequestMethod.POST)
+	public String authorize(Map<String, Object> map,
+			@RequestParam String client_id, @RequestParam String redirect_uri,
 			@RequestParam String response_type,
 			@RequestParam(required = false) String scope,
 			@RequestParam(required = false) String state,
 			@RequestParam String user_name, @RequestParam String user_pass) {
 
-		Map<String, Object> map = new HashMap<String, Object>();
-
 		if (null == StringUtil.isEmpty(client_id)) {
 			map.put("code", "invalid_client_id");
-			return map;
+			return ROOT + "user/authorize_error";
 		}
 
 		if (null == StringUtil.isEmpty(redirect_uri)) {
 			map.put("code", "invalid_redirect_uri");
-			return map;
+			return ROOT + "user/authorize_error";
 		}
 
 		switch (response_type) {
@@ -123,7 +121,14 @@ public class UserController extends BaseController {
 			break;
 		default:
 			map.put("code", "unsupported_response_type");
-			return map;
+			return ROOT + "user/authorize_error";
+		}
+
+		UserApp ua = userAppService.getUserAuth(client_id);
+
+		if (null == ua) {
+			map.put("code", "invalid_client_id");
+			return ROOT + "user/authorize_error";
 		}
 
 		ResultMap<User> m = userService.login(user_name, user_pass);
@@ -131,9 +136,17 @@ public class UserController extends BaseController {
 		if (!m.getSuccess()) {
 			map.put("code", m.getCode());
 			map.put("msg", m.getMsg());
-			return map;
+			return ROOT + "user/authorize_error";
 		}
 
-		return map;
+		String code = userAppService.authorize(client_id, redirect_uri,
+				"user_id");
+
+		if (null == code) {
+			map.put("code", "invalid_authorize");
+			return ROOT + "user/authorize_error";
+		}
+
+		return "redirect:" + redirect_uri + "?code=" + code + "&state=" + state;
 	}
 }

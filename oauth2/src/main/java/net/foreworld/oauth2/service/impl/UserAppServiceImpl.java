@@ -33,4 +33,10 @@ public class UserAppServiceImpl extends BaseService<UserAppMapper, UserApp>
 		return l;
 	}
 
+	@Override
+	public String authorize(String client_id, String redirect_uri,
+			String user_id) {
+		return "83d844d8ae06fbc1299ba3f5ed088834";
+	}
+
 }
