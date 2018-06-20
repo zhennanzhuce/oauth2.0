@@ -20,7 +20,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = "net.foreworld.oauth2.mapper")
 @ImportResource(locations = { "classpath:spring-all.xml" })
 @SpringBootApplication(scanBasePackages = { "net.foreworld.core",
-		"net.foreworld.oauth2" })
+		"net.foreworld.util", "net.foreworld.oauth2" })
 @EnableAutoConfiguration(exclude = { MongoAutoConfiguration.class,
 		MongoDataAutoConfiguration.class })
 public class RunOauth2AppClient implements CommandLineRunner {

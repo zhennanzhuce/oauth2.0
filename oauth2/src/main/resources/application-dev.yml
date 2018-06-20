@@ -1,4 +1,17 @@
 
+lua:
+  authorize:
+    sha1: 7c1a0e2b18597d1dbfbb28985a6bd01796e0e78a
+    seconds: 600
+  token:
+    sha1: dd772d67fd811eca4aee6e8a1c803d8c1de9c63f
+    seconds: 3600
+  getSession:
+    sha1: b41da011bd36971042ecd130547f617cc3295eda
+  pw:
+    sha1: 0338b12e85eac5190afd685c6e201ff7f72f3b72
+
+
 server:
   port: 8883
 

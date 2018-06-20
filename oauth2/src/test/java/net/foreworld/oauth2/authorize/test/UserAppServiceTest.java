@@ -7,12 +7,16 @@ import javax.annotation.Resource;
 import net.foreworld.oauth2.RunOauth2AppClient;
 import net.foreworld.oauth2.model.UserApp;
 import net.foreworld.oauth2.service.UserAppService;
+import net.foreworld.util.FileUtil;
+import net.foreworld.util.RedisUtil;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import redis.clients.jedis.Jedis;
 
 /**
  *
@@ -41,13 +45,34 @@ public class UserAppServiceTest {
 	}
 
 	@Test
-	public void test_getAll() {
-		List<UserApp> l = userAppService.getAll();
+	public void test_selectByExample() {
+		List<UserApp> l = userAppService.selectByExample(null);
 		System.err.println(l.size());
 
 		for (int i = 0; i < l.size(); i++) {
 			System.err.println(l.get(i).getId() + ":" + l.get(i).getApp_name());
 		}
+	}
+
+	@Resource
+	RedisUtil redisUtil;
+
+	@Test
+	public void test_scriptLoad() {
+		String file = FileUtil
+				.read("D:/git/zhennanzhuce/oauth2.0/assets/lua/pw.lua");
+
+		Jedis j = redisUtil.getJedis();
+
+		if (null == j)
+			return;
+
+		Object o = j.scriptLoad(file);
+
+		if (null == o)
+			return;
+
+		System.err.println(o.toString());
 	}
 
 }
