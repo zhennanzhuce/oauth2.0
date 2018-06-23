@@ -59,20 +59,33 @@ public class UserAppServiceTest {
 
 	@Test
 	public void test_scriptLoad() {
-		String file = FileUtil
-				.read("D:/git/zhennanzhuce/oauth2.0/assets/lua/pw.lua");
+		System.err
+				.println("authorize: "
+						+ lua_sha1("D:/git/zhennanzhuce/oauth2.0/assets/lua/authorize.lua"));
+		System.err
+				.println("getSession: "
+						+ lua_sha1("D:/git/zhennanzhuce/oauth2.0/assets/lua/getSession.lua"));
+		System.err.println("pw: "
+				+ lua_sha1("D:/git/zhennanzhuce/oauth2.0/assets/lua/pw.lua"));
+		System.err
+				.println("token: "
+						+ lua_sha1("D:/git/zhennanzhuce/oauth2.0/assets/lua/token.lua"));
+	}
+
+	private String lua_sha1(String filePath) {
+		String file = FileUtil.read(filePath);
 
 		Jedis j = redisUtil.getJedis();
 
 		if (null == j)
-			return;
+			return null;
 
 		Object o = j.scriptLoad(file);
 
 		if (null == o)
-			return;
+			return null;
 
-		System.err.println(o.toString());
+		return o.toString();
 	}
 
 }

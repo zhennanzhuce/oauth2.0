@@ -110,7 +110,8 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = { "/" }, method = RequestMethod.POST)
 	public String authorize(Map<String, Object> map,
-			@RequestParam String client_id, @RequestParam String redirect_uri,
+			@RequestParam(name = "client_id") String client_id,
+			@RequestParam String redirect_uri,
 			@RequestParam String response_type,
 			@RequestParam(required = false) String scope,
 			@RequestParam(required = false) String state,
