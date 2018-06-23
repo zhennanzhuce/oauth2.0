@@ -19,6 +19,15 @@ import redis.clients.jedis.JedisPoolConfig;
 @Scope
 public class RedisUtil {
 
+	JedisPoolConfig config = null;
+
+	public RedisUtil() {
+		config = new JedisPoolConfig();
+		config.setMaxIdle(db_redis_maxIdle);
+		config.setMaxWaitMillis(db_redis_maxWaitMillis);
+		config.setTestOnBorrow(db_redis_testOnBorrow);
+	}
+
 	@Value("${db.redis.maxIdle}")
 	int db_redis_maxIdle;
 
@@ -44,10 +53,6 @@ public class RedisUtil {
 
 	private void initPool() {
 		try {
-			JedisPoolConfig config = new JedisPoolConfig();
-			config.setMaxIdle(db_redis_maxIdle);
-			config.setMaxWaitMillis(db_redis_maxWaitMillis);
-			config.setTestOnBorrow(db_redis_testOnBorrow);
 			// timeout 最大延迟时间
 			jedisPool = new JedisPool(config, db_redis_host, db_redis_port,
 					db_redis_timeout, db_redis_pass);
@@ -68,6 +73,12 @@ public class RedisUtil {
 			return jedisPool.getResource();
 		} catch (Exception e) {
 			e.printStackTrace();
+
+			if (null != jedisPool) {
+				jedisPool.close();
+				jedisPool = null;
+			}
+
 			return null;
 		}
 	}
