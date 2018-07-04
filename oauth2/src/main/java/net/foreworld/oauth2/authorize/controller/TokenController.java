@@ -13,6 +13,7 @@ import net.foreworld.oauth2.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -32,10 +33,14 @@ public class TokenController extends BaseController {
 	/**
 	 *
 	 * @param principal
+	 * @param redirect_uri
+	 * @param code
 	 * @return
 	 */
 	@RequestMapping(value = { "/auth/" }, method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Object> auth(Principal principal) {
+	public Map<String, Object> auth(Principal principal,
+			@RequestParam String redirect_uri, @RequestParam String code) {
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("name", principal.getName());
 		result.put("success", true);
